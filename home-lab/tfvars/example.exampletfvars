@@ -1,0 +1,4 @@
+proxmox_api_url = "https://192.168.1.120:8006/api2/json"
+pm_api_token_id = "terraform-prov@pve!terraform-prov"
+pm_tls_insecure = true
+iso             = "nas-isos:iso/talos-metal-amd64.iso"

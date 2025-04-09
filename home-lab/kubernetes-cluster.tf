@@ -29,7 +29,7 @@ resource "proxmox_vm_qemu" "talos-m01" {
     ide {
       ide2 {
         cdrom {
-          iso = "nas-isos:iso/talos-metal-amd64.iso"
+          iso = var.talos_iso
         }
       }
     }
@@ -72,7 +72,7 @@ resource "proxmox_vm_qemu" "talos-m02" {
     ide {
       ide2 {
         cdrom {
-          iso = "nas-isos:iso/talos-metal-amd64.iso"
+          iso = var.talos_iso
         }
       }
     }
@@ -115,7 +115,7 @@ resource "proxmox_vm_qemu" "talos-m03" {
     ide {
       ide2 {
         cdrom {
-          iso = "nas-isos:iso/talos-metal-amd64.iso"
+          iso = var.talos_iso
         }
       }
     }
@@ -158,7 +158,7 @@ resource "proxmox_vm_qemu" "talos-w01" {
     ide {
       ide2 {
         cdrom {
-          iso = "nas-isos:iso/talos-metal-amd64.iso"
+          iso = var.talos_iso
         }
       }
     }
@@ -201,7 +201,7 @@ resource "proxmox_vm_qemu" "talos-w02" {
     ide {
       ide2 {
         cdrom {
-          iso = "nas-isos:iso/talos-metal-amd64.iso"
+          iso = var.talos_iso
         }
       }
     }
@@ -244,7 +244,7 @@ resource "proxmox_vm_qemu" "talos-w03" {
     ide {
       ide2 {
         cdrom {
-          iso = "nas-isos:iso/talos-metal-amd64.iso"
+          iso = var.talos_iso
         }
       }
     }
