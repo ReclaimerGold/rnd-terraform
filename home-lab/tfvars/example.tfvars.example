@@ -1,12 +1,14 @@
+### Instructions: copy this file to a 'prod.tfvars' or 'dev.tfvars' file for use in your 'terraform apply/plan' commands.
+
 ### Proxmox Virtual Environment Varialbes
-proxmox_api_url     = "https://IP_ADDRESS:8006/api2/json"
-pm_api_token_id     = ""
-pm_api_token_secret = ""
-pm_tls_insecure     = true
+proxmox_api_url     = "https://IP_ADDRESS:8006/api2/json"   # Must include HTTPS
+pm_api_token_id     = ""                                    # Used instead of Username
+pm_api_token_secret = ""                                    # Used instead of Password
+pm_tls_insecure     = true                                  # Set to TRUE if you are using Self-Signed Certificates
 
 ### Kubernetes Cluster Variables
-talos_iso              = "ISO_PATH"
-kube_node_storage_pool = "POOL_NAME"
+talos_iso              = "ISO_PATH"     # Format: "storage-pool:storage-type/iso-name-with-file-extension"
+kube_node_storage_pool = "POOL_NAME"    # Format: "storage-pool"
 
 # Control Plane (Master) Node Settings
 kube_master_cpus            = 4
