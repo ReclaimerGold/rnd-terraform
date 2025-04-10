@@ -17,15 +17,7 @@ resource "proxmox_vm_qemu" "talos-m01" {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = var.kube_master_storage_root
-          storage = var.kube_node_storage_pool
-          format  = "qcow2"
-          iothread = true
-        }
-      }
-      scsi1 {
-        disk { # Storage Disk
-          size    = var.kube_master_storage_cluster
+          size    = var.kube_master_storage
           storage = var.kube_node_storage_pool
           format  = "qcow2"
           iothread = true
@@ -46,6 +38,7 @@ resource "proxmox_vm_qemu" "talos-m01" {
     model    = "virtio"
     bridge   = "vmbr0"
     firewall = true
+    tag      = 50
   }
 }
 
@@ -66,15 +59,7 @@ resource "proxmox_vm_qemu" "talos-m02" {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = var.kube_master_storage_root
-          storage = var.kube_node_storage_pool
-          format  = "qcow2"
-          iothread = true
-        }
-      }
-      scsi1 {
-        disk { # Storage Disk
-          size    = var.kube_master_storage_cluster
+          size    = var.kube_master_storage
           storage = var.kube_node_storage_pool
           format  = "qcow2"
           iothread = true
@@ -95,6 +80,7 @@ resource "proxmox_vm_qemu" "talos-m02" {
     model    = "virtio"
     bridge   = "vmbr0"
     firewall = true
+    tag      = 50
   }
 }
 
@@ -115,15 +101,7 @@ resource "proxmox_vm_qemu" "talos-m03" {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = var.kube_master_storage_root
-          storage = var.kube_node_storage_pool
-          format  = "qcow2"
-          iothread = true
-        }
-      }
-      scsi1 {
-        disk { # Storage Disk
-          size    = var.kube_master_storage_cluster
+          size    = var.kube_master_storage
           storage = var.kube_node_storage_pool
           format  = "qcow2"
           iothread = true
@@ -144,6 +122,7 @@ resource "proxmox_vm_qemu" "talos-m03" {
     model    = "virtio"
     bridge   = "vmbr0"
     firewall = true
+    tag      = 50
   }
 }
 
@@ -164,15 +143,7 @@ resource "proxmox_vm_qemu" "talos-w01" {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = var.kube_worker_storage_root
-          storage = var.kube_node_storage_pool
-          format  = "qcow2"
-          iothread = true
-        }
-      }
-      scsi1 {
-        disk { # Storage Disk
-          size    = var.kube_worker_storage_cluster
+          size    = var.kube_worker_storage
           storage = var.kube_node_storage_pool
           format  = "qcow2"
           iothread = true
@@ -193,6 +164,7 @@ resource "proxmox_vm_qemu" "talos-w01" {
     model    = "virtio"
     bridge   = "vmbr0"
     firewall = true
+    tag      = 50
   }
 }
 
@@ -213,15 +185,7 @@ resource "proxmox_vm_qemu" "talos-w02" {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = var.kube_worker_storage_root
-          storage = var.kube_node_storage_pool
-          format  = "qcow2"
-          iothread = true
-        }
-      }
-      scsi1 {
-        disk { # Storage Disk
-          size    = var.kube_worker_storage_cluster
+          size    = var.kube_worker_storage
           storage = var.kube_node_storage_pool
           format  = "qcow2"
           iothread = true
@@ -242,6 +206,7 @@ resource "proxmox_vm_qemu" "talos-w02" {
     model    = "virtio"
     bridge   = "vmbr0"
     firewall = true
+    tag      = 50
   }
 }
 
@@ -262,15 +227,7 @@ resource "proxmox_vm_qemu" "talos-w03" {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = var.kube_worker_storage_root
-          storage = var.kube_node_storage_pool
-          format  = "qcow2"
-          iothread = true
-        }
-      }
-      scsi1 {
-        disk { # Storage Disk
-          size    = var.kube_worker_storage_cluster
+          size    = var.kube_worker_storage
           storage = var.kube_node_storage_pool
           format  = "qcow2"
           iothread = true
@@ -291,6 +248,7 @@ resource "proxmox_vm_qemu" "talos-w03" {
     model    = "virtio"
     bridge   = "vmbr0"
     firewall = true
+    tag      = 50
   }
 }
 

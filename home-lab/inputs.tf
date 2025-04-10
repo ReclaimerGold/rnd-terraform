@@ -45,13 +45,8 @@ variable "kube_master_cpus" {
   type        = number
 }
 
-variable "kube_master_storage_root" {
+variable "kube_master_storage" {
   description = "k8s Master Node Root Disk Size"
-  type        = string
-}
-
-variable "kube_master_storage_cluster" {
-  description = "k8s Master Node Storage Disk Size"
   type        = string
 }
 
@@ -71,12 +66,7 @@ variable "kube_worker_cpus" {
   type        = number
 }
 
-variable "kube_worker_storage_root" {
+variable "kube_worker_storage" {
   description = "k8s Worker Node Root Disk Size"
-  type        = string
-}
-
-variable "kube_worker_storage_cluster" {
-  description = "k8s Worker Node Storage Disk Size"
   type        = string
 }
