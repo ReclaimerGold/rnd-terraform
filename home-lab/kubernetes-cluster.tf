@@ -8,18 +8,18 @@ resource "proxmox_vm_qemu" "talos-m01" {
   memory      = var.kube_master_ram
   balloon     = var.kube_master_balloon
   # sockets         = 1
-  cores = var.kube_master_cpus
-  tags  = "kubernetes,kcp"
-  pool = "reifnet"
+  cores  = var.kube_master_cpus
+  tags   = "kubernetes,kcp"
+  pool   = "reifnet"
   scsihw = "virtio-scsi-single"
 
   disks {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = var.kube_master_storage
-          storage = var.kube_node_storage_pool
-          format  = "qcow2"
+          size     = var.kube_master_storage
+          storage  = var.kube_node_storage_pool
+          format   = "qcow2"
           iothread = true
         }
       }
@@ -50,18 +50,18 @@ resource "proxmox_vm_qemu" "talos-m02" {
   memory      = var.kube_master_ram
   balloon     = var.kube_master_balloon
   # sockets         = 1
-  cores = var.kube_master_cpus
-  tags  = "kubernetes,kcp"
-  pool = "reifnet"
+  cores  = var.kube_master_cpus
+  tags   = "kubernetes,kcp"
+  pool   = "reifnet"
   scsihw = "virtio-scsi-single"
 
   disks {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = var.kube_master_storage
-          storage = var.kube_node_storage_pool
-          format  = "qcow2"
+          size     = var.kube_master_storage
+          storage  = var.kube_node_storage_pool
+          format   = "qcow2"
           iothread = true
         }
       }
@@ -92,18 +92,18 @@ resource "proxmox_vm_qemu" "talos-m03" {
   memory      = var.kube_master_ram
   balloon     = var.kube_master_balloon
   # sockets         = 1
-  cores = var.kube_master_cpus
-  tags  = "kubernetes,kcp"
-  pool = "reifnet"
+  cores  = var.kube_master_cpus
+  tags   = "kubernetes,kcp"
+  pool   = "reifnet"
   scsihw = "virtio-scsi-single"
 
   disks {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = var.kube_master_storage
-          storage = var.kube_node_storage_pool
-          format  = "qcow2"
+          size     = var.kube_master_storage
+          storage  = var.kube_node_storage_pool
+          format   = "qcow2"
           iothread = true
         }
       }
@@ -134,18 +134,18 @@ resource "proxmox_vm_qemu" "talos-w01" {
   memory      = var.kube_worker_ram
   balloon     = var.kube_worker_balloon
   # sockets         = 1
-  cores = var.kube_worker_cpus
-  tags  = "kubernetes,kw"
-  pool = "reifnet"
+  cores  = var.kube_worker_cpus
+  tags   = "kubernetes,kw"
+  pool   = "reifnet"
   scsihw = "virtio-scsi-single"
 
   disks {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = var.kube_worker_storage
-          storage = var.kube_node_storage_pool
-          format  = "qcow2"
+          size     = var.kube_worker_storage
+          storage  = var.kube_node_storage_pool
+          format   = "qcow2"
           iothread = true
         }
       }
@@ -176,18 +176,18 @@ resource "proxmox_vm_qemu" "talos-w02" {
   memory      = var.kube_worker_ram
   balloon     = var.kube_worker_balloon
   # sockets         = 1
-  cores = var.kube_worker_cpus
-  tags  = "kubernetes,kw"
-  pool = "reifnet"
+  cores  = var.kube_worker_cpus
+  tags   = "kubernetes,kw"
+  pool   = "reifnet"
   scsihw = "virtio-scsi-single"
 
   disks {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = var.kube_worker_storage
-          storage = var.kube_node_storage_pool
-          format  = "qcow2"
+          size     = var.kube_worker_storage
+          storage  = var.kube_node_storage_pool
+          format   = "qcow2"
           iothread = true
         }
       }
@@ -218,18 +218,18 @@ resource "proxmox_vm_qemu" "talos-w03" {
   memory      = var.kube_worker_ram
   balloon     = var.kube_worker_balloon
   # sockets         = 1
-  cores = var.kube_worker_cpus
-  tags  = "kubernetes,kw"
-  pool = "reifnet"
+  cores  = var.kube_worker_cpus
+  tags   = "kubernetes,kw"
+  pool   = "reifnet"
   scsihw = "virtio-scsi-single"
 
   disks {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = var.kube_worker_storage
-          storage = var.kube_node_storage_pool
-          format  = "qcow2"
+          size     = var.kube_worker_storage
+          storage  = var.kube_node_storage_pool
+          format   = "qcow2"
           iothread = true
         }
       }
