@@ -1,0 +1,23 @@
+### Proxmox Virtual Environment Varialbes
+proxmox_api_url     = "https://IP_ADDRESS:8006/api2/json"
+pm_api_token_id     = ""
+pm_api_token_secret = ""
+pm_tls_insecure     = true
+
+### Kubernetes Cluster Variables
+talos_iso              = "ISO_PATH"
+kube_node_storage_pool = "POOL_NAME"
+
+# Control Plane (Master) Node Settings
+kube_master_cpus            = 4
+kube_master_ram             = 4096
+kube_master_balloon         = 2048
+kube_master_storage_root    = "20G"
+kube_master_storage_cluster = "100G"
+
+# Worker Node Settings
+kube_worker_cpus            = 2
+kube_worker_ram             = 2048
+kube_worker_balloon         = 2048
+kube_worker_storage_root    = "20G"
+kube_worker_storage_cluster = "100G"

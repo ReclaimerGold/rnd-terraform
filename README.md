@@ -2,6 +2,11 @@
 
 This repository is used to manage the static infrastructure in the Reif.NET Datacenter utilizing GitOps principles. 
 
+## Utilizing
+
+To run this project, go to the 'home-lab' folder, and run the command
+`terraform apply -var-file <your-tfvars-file>`
+
 ## Current Components
 
 At the moment, only the following components of our datacenter are included:

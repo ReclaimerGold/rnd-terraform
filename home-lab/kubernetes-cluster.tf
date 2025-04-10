@@ -5,24 +5,24 @@ resource "proxmox_vm_qemu" "talos-m01" {
   name        = "talos-m01"
   target_node = "vm-01"
   agent       = 1
-  memory      = 4096
-  balloon     = 2048
+  memory      = var.kube_master_ram
+  balloon     = var.kube_master_balloon
   # sockets         = 1
-  cores = 4
+  cores = var.kube_master_cpus
   tags  = "kubernetes,kcp"
 
   disks {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = "20G"
-          storage = "nas-vdisk"
+          size    = var.kube_master_storage_root
+          storage = var.kube_node_storage_pool
         }
       }
       scsi1 {
         disk { # Storage Disk
-          size    = "100G"
-          storage = "nas-vdisk"
+          size    = var.kube_master_storage_cluster
+          storage = var.kube_node_storage_pool
         }
       }
     }
@@ -48,24 +48,24 @@ resource "proxmox_vm_qemu" "talos-m02" {
   name        = "talos-m02"
   target_node = "vm-01" # Set to 'vm-01' while 'vm-02' is in hibernation
   agent       = 1
-  memory      = 4096
-  balloon     = 2048
+  memory      = var.kube_master_ram
+  balloon     = var.kube_master_balloon
   # sockets         = 1
-  cores = 4
+  cores = var.kube_master_cpus
   tags  = "kubernetes,kcp"
 
   disks {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = "20G"
-          storage = "nas-vdisk"
+          size    = var.kube_master_storage_root
+          storage = var.kube_node_storage_pool
         }
       }
       scsi1 {
         disk { # Storage Disk
-          size    = "100G"
-          storage = "nas-vdisk"
+          size    = var.kube_master_storage_cluster
+          storage = var.kube_node_storage_pool
         }
       }
     }
@@ -91,24 +91,24 @@ resource "proxmox_vm_qemu" "talos-m03" {
   name        = "talos-m03"
   target_node = "vm-03"
   agent       = 1
-  memory      = 4096
-  balloon     = 2048
+  memory      = var.kube_master_ram
+  balloon     = var.kube_master_balloon
   # sockets         = 1
-  cores = 4
+  cores = var.kube_master_cpus
   tags  = "kubernetes,kcp"
 
   disks {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = "20G"
-          storage = "nas-vdisk"
+          size    = var.kube_master_storage_root
+          storage = var.kube_node_storage_pool
         }
       }
       scsi1 {
         disk { # Storage Disk
-          size    = "100G"
-          storage = "nas-vdisk"
+          size    = var.kube_master_storage_cluster
+          storage = var.kube_node_storage_pool
         }
       }
     }
@@ -134,24 +134,24 @@ resource "proxmox_vm_qemu" "talos-w01" {
   name        = "talos-w01"
   target_node = "vm-01"
   agent       = 1
-  memory      = 2048
-  balloon     = 2048
+  memory      = var.kube_worker_ram
+  balloon     = var.kube_worker_balloon
   # sockets         = 1
-  cores = 2
+  cores = var.kube_worker_cpus
   tags  = "kubernetes,kw"
 
   disks {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = "20G"
-          storage = "nas-vdisk"
+          size    = var.kube_worker_storage_root
+          storage = var.kube_node_storage_pool
         }
       }
       scsi1 {
         disk { # Storage Disk
-          size    = "100G"
-          storage = "nas-vdisk"
+          size    = var.kube_worker_storage_cluster
+          storage = var.kube_node_storage_pool
         }
       }
     }
@@ -177,24 +177,24 @@ resource "proxmox_vm_qemu" "talos-w02" {
   name        = "talos-w02"
   target_node = "vm-01" # Set to 'vm-01' while 'vm-02' is in hibernation
   agent       = 1
-  memory      = 2048
-  balloon     = 2048
+  memory      = var.kube_worker_ram
+  balloon     = var.kube_worker_balloon
   # sockets         = 1
-  cores = 2
+  cores = var.kube_worker_cpus
   tags  = "kubernetes,kw"
 
   disks {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = "20G"
-          storage = "nas-vdisk"
+          size    = var.kube_worker_storage_root
+          storage = var.kube_node_storage_pool
         }
       }
       scsi1 {
         disk { # Storage Disk
-          size    = "100G"
-          storage = "nas-vdisk"
+          size    = var.kube_worker_storage_cluster
+          storage = var.kube_node_storage_pool
         }
       }
     }
@@ -220,24 +220,24 @@ resource "proxmox_vm_qemu" "talos-w03" {
   name        = "talos-w03"
   target_node = "vm-03"
   agent       = 1
-  memory      = 2048
-  balloon     = 2048
+  memory      = var.kube_worker_ram
+  balloon     = var.kube_worker_balloon
   # sockets         = 1
-  cores = 2
+  cores = var.kube_worker_cpus
   tags  = "kubernetes,kw"
 
   disks {
     scsi {
       scsi0 {
         disk { # Root Disk
-          size    = "20G"
-          storage = "nas-vdisk"
+          size    = var.kube_worker_storage_root
+          storage = var.kube_node_storage_pool
         }
       }
       scsi1 {
         disk { # Storage Disk
-          size    = "100G"
-          storage = "nas-vdisk"
+          size    = var.kube_worker_storage_cluster
+          storage = var.kube_node_storage_pool
         }
       }
     }
