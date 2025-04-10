@@ -10,6 +10,8 @@ resource "proxmox_vm_qemu" "talos-m01" {
   # sockets         = 1
   cores = var.kube_master_cpus
   tags  = "kubernetes,kcp"
+  pool = "reifnet"
+  scsihw = "virtio-scsi-single"
 
   disks {
     scsi {
@@ -17,12 +19,16 @@ resource "proxmox_vm_qemu" "talos-m01" {
         disk { # Root Disk
           size    = var.kube_master_storage_root
           storage = var.kube_node_storage_pool
+          format  = "qcow2"
+          iothread = true
         }
       }
       scsi1 {
         disk { # Storage Disk
           size    = var.kube_master_storage_cluster
           storage = var.kube_node_storage_pool
+          format  = "qcow2"
+          iothread = true
         }
       }
     }
@@ -53,6 +59,8 @@ resource "proxmox_vm_qemu" "talos-m02" {
   # sockets         = 1
   cores = var.kube_master_cpus
   tags  = "kubernetes,kcp"
+  pool = "reifnet"
+  scsihw = "virtio-scsi-single"
 
   disks {
     scsi {
@@ -60,12 +68,16 @@ resource "proxmox_vm_qemu" "talos-m02" {
         disk { # Root Disk
           size    = var.kube_master_storage_root
           storage = var.kube_node_storage_pool
+          format  = "qcow2"
+          iothread = true
         }
       }
       scsi1 {
         disk { # Storage Disk
           size    = var.kube_master_storage_cluster
           storage = var.kube_node_storage_pool
+          format  = "qcow2"
+          iothread = true
         }
       }
     }
@@ -96,6 +108,8 @@ resource "proxmox_vm_qemu" "talos-m03" {
   # sockets         = 1
   cores = var.kube_master_cpus
   tags  = "kubernetes,kcp"
+  pool = "reifnet"
+  scsihw = "virtio-scsi-single"
 
   disks {
     scsi {
@@ -103,12 +117,16 @@ resource "proxmox_vm_qemu" "talos-m03" {
         disk { # Root Disk
           size    = var.kube_master_storage_root
           storage = var.kube_node_storage_pool
+          format  = "qcow2"
+          iothread = true
         }
       }
       scsi1 {
         disk { # Storage Disk
           size    = var.kube_master_storage_cluster
           storage = var.kube_node_storage_pool
+          format  = "qcow2"
+          iothread = true
         }
       }
     }
@@ -139,6 +157,8 @@ resource "proxmox_vm_qemu" "talos-w01" {
   # sockets         = 1
   cores = var.kube_worker_cpus
   tags  = "kubernetes,kw"
+  pool = "reifnet"
+  scsihw = "virtio-scsi-single"
 
   disks {
     scsi {
@@ -146,12 +166,16 @@ resource "proxmox_vm_qemu" "talos-w01" {
         disk { # Root Disk
           size    = var.kube_worker_storage_root
           storage = var.kube_node_storage_pool
+          format  = "qcow2"
+          iothread = true
         }
       }
       scsi1 {
         disk { # Storage Disk
           size    = var.kube_worker_storage_cluster
           storage = var.kube_node_storage_pool
+          format  = "qcow2"
+          iothread = true
         }
       }
     }
@@ -182,6 +206,8 @@ resource "proxmox_vm_qemu" "talos-w02" {
   # sockets         = 1
   cores = var.kube_worker_cpus
   tags  = "kubernetes,kw"
+  pool = "reifnet"
+  scsihw = "virtio-scsi-single"
 
   disks {
     scsi {
@@ -189,12 +215,16 @@ resource "proxmox_vm_qemu" "talos-w02" {
         disk { # Root Disk
           size    = var.kube_worker_storage_root
           storage = var.kube_node_storage_pool
+          format  = "qcow2"
+          iothread = true
         }
       }
       scsi1 {
         disk { # Storage Disk
           size    = var.kube_worker_storage_cluster
           storage = var.kube_node_storage_pool
+          format  = "qcow2"
+          iothread = true
         }
       }
     }
@@ -225,6 +255,8 @@ resource "proxmox_vm_qemu" "talos-w03" {
   # sockets         = 1
   cores = var.kube_worker_cpus
   tags  = "kubernetes,kw"
+  pool = "reifnet"
+  scsihw = "virtio-scsi-single"
 
   disks {
     scsi {
@@ -232,12 +264,16 @@ resource "proxmox_vm_qemu" "talos-w03" {
         disk { # Root Disk
           size    = var.kube_worker_storage_root
           storage = var.kube_node_storage_pool
+          format  = "qcow2"
+          iothread = true
         }
       }
       scsi1 {
         disk { # Storage Disk
           size    = var.kube_worker_storage_cluster
           storage = var.kube_node_storage_pool
+          format  = "qcow2"
+          iothread = true
         }
       }
     }
