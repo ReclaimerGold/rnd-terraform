@@ -18,7 +18,7 @@ resource "random_id" "mac" {
 resource "proxmox_vm_qemu" "vm" {
   name        = "${var.name_prefix}${format("%02d", var.index + 1)}"
   target_node = element(var.target_nodes, var.index)
-  agent       = 1
+  agent       = 0
   skip_ipv6   = true # Acquiring an IPv6 address from the qemu guest agent isn't required
   memory      = var.memory
   balloon     = var.balloon
