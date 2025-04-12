@@ -10,6 +10,13 @@ pm_tls_insecure     = true                                  # Set to TRUE if you
 talos_iso              = "ISO_PATH"     # Format: "storage-pool:storage-type/iso-name-with-file-extension"
 kube_node_storage_pool = "POOL_NAME"    # Format: "storage-pool"
 
+control_plane_count    = 3
+worker_count           = 3
+
+# Target nodes for each group (cycled using element() in the module)
+master_target_nodes = ["vm-01", "vm-03"]
+worker_target_nodes = ["vm-01", "vm-03"]
+
 # Control Plane (Master) Node Settings
 kube_master_cpus            = 4
 kube_master_ram             = 4096
