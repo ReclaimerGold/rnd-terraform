@@ -2,11 +2,15 @@ terraform {
   required_providers {
     proxmox = {
       source  = "telmate/proxmox"
-      version = "3.0.1-rc8" # or whatever version you're using
+      version = "3.0.1-rc8"
     }
     talos = {
       source  = "siderolabs/talos"
       version = "0.7.1"
+    }
+    adguard = {
+      source  = "gmichels/adguard"
+      version = "1.5.1"
     }
   }
 }
@@ -19,3 +23,12 @@ provider "proxmox" {
 }
 
 provider "talos" {}
+
+provider "adguard" {
+  host     = var.adguard_host
+  username = var.adguard_username
+  password = var.adguard_password
+  scheme   = "http" # defaults to https
+  timeout  = 5      # in seconds, defaults to 10
+  insecure = false  # when `true` will skip TLS validation
+}
