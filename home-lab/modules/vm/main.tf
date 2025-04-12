@@ -18,7 +18,7 @@ resource "random_id" "mac" {
 resource "proxmox_vm_qemu" "vm" {
   name        = "${var.name_prefix}${format("%02d", var.index + 1)}"
   target_node = element(var.target_nodes, var.index)
-  agent       = 0
+  agent       = 1    # Required to retrieve the IPv4 Address for cluster configuration
   skip_ipv6   = true # Acquiring an IPv6 address from the qemu guest agent isn't required
   memory      = var.memory
   balloon     = var.balloon
@@ -62,13 +62,4 @@ resource "proxmox_vm_qemu" "vm" {
       substr(random_id.mac.hex, 4, 2)
     )
   }
-}
-
-output "mac_address" {
-  value = format(
-    "52:54:00:%s:%s:%s",
-    substr(random_id.mac.hex, 0, 2),
-    substr(random_id.mac.hex, 2, 2),
-    substr(random_id.mac.hex, 4, 2)
-  )
 }
