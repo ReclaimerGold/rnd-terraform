@@ -1,3 +1,35 @@
+### Datacenter Network Configuration
+variable "datacenter_vlan_tag" {
+  description = "Specifies the VLAN tag that should be used when deploying machines to the datacenter."
+}
+
+### Local DNS Record Configuration
+variable "dns_base_tld" {
+  description = "The base TLD (Top-Level Domain) for your local network. Example: 'microsoft.com' would be 'com'."
+  type        = string
+}
+
+variable "dns_cluster_sld" {
+  description = "The SLD (Second-Level Domain) for your Kubernetes Cluster. Example: 'microsoft.com' would be 'microsoft'."
+  type        = string
+}
+
+### Adguard DNS Server
+variable "adguard_host" {
+  description = "The Username for the Terraform Account in AdGuard"
+  type        = string
+}
+
+variable "adguard_username" {
+  description = "The Password for the Terraform Account in AdGuard"
+  type        = string
+}
+
+variable "adguard_password" {
+  description = "The URL for the AdGuard server"
+  type        = string
+}
+
 ### PVE (Proxmox Virtual Environment)
 variable "proxmox_api_url" {
   description = "Proxmox API URL (e.g., https://your-proxmox-host:8006/api2/json)"
@@ -19,6 +51,11 @@ variable "pm_tls_insecure" {
   description = "Set to true to bypass self-signed TLS cert validation"
   type        = bool
   default     = false
+}
+
+variable "pm_pool" {
+  description = "Proxmox Pool to Deploy Resources Into"
+  type        = string
 }
 
 ### Kubernetes Cluster Settings
@@ -49,6 +86,21 @@ variable "master_target_nodes" {
 
 variable "worker_target_nodes" {
   description = "List of Proxmox nodes to cycle through for workers"
+  type        = list(string)
+}
+
+variable "node_gateway_ip" {
+  description = "Specifies the Gateway IP addresses to use when deploying nodes."
+  type        = string
+}
+
+variable "master_target_ips" {
+  description = "Specifies the IP addresses to use when deploying control plane nodes."
+  type        = list(string)
+}
+
+variable "worker_target_ips" {
+  description = "Specifies the IP addresses to use when deploying worker nodes."
   type        = list(string)
 }
 

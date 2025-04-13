@@ -1,3 +1,40 @@
+### Local Variables (kubernetes-cluster.tf only)
+locals {
+  # Network Assigned Values
+  master_ips   = [for m in module.control_plane : m.ip_address]
+  worker_ips   = [for m in module.worker : m.ip_address]
+
+  # Variable-defined Values
+  all_node_ips = concat(local.master_ips, local.worker_ips)
+  all_node_static_ips = concat(var.master_target_ips, var.worker_target_ips)
+  master_url   = "https://${local.master_ips[0]}:6443"
+  formatted_endpoint_urls = [
+    for ip in var.master_target_ips : "https://${ip}:6443"
+  ]
+
+  # Name => *Static* IP Address Map
+  node_map_static = merge(
+    { for idx, name in local.master_names : name => var.master_target_ips[idx] },
+    { for idx, name in local.worker_names : name => var.worker_target_ips[idx] },
+  )
+
+  # Name => *Dynamic* (current/DHCP) IP Address Map
+  node_map_dynamic = merge(
+    { for m in module.control_plane : m.name => m.ip_address },
+    { for m in module.worker        : m.name => m.ip_address }
+  )
+
+  master_names   = [for m in module.control_plane : m.name]
+  worker_names   = [for m in module.worker : m.name]
+  all_node_names = concat(local.master_names, local.worker_names)
+
+  master_domains = [for name in local.master_names : "${name}.${var.dns_cluster_sld}.${var.dns_base_tld}"]
+  worker_domains = [for name in local.worker_names : "${name}.${var.dns_cluster_sld}.${var.dns_base_tld}"]
+  all_node_domains = concat(local.master_domains, local.worker_domains)
+
+  cluster_name     = "${var.dns_cluster_sld}.${var.dns_base_tld}"
+}
+
 ### Node Infrastructure (VMs on PVE)
 module "control_plane" {
   source = "./modules/vm"
@@ -13,19 +50,20 @@ module "control_plane" {
   balloon      = var.kube_master_balloon
   cores        = var.kube_master_cpus
   tags         = "kubernetes,kcp"
-  pool         = "reifnet"
+  pool         = var.pm_pool
   scsihw       = "virtio-scsi-single"
   disk_size    = var.kube_master_storage
   storage_pool = var.kube_node_storage_pool
   iso          = var.talos_iso
   bridge       = "vmbr0"
-  vlan_tag     = 50
+  vlan_tag     = var.datacenter_vlan_tag
   target_nodes = var.master_target_nodes
 }
 
 module "worker" {
   source = "./modules/vm"
   count  = var.worker_count
+  depends_on = [ module.control_plane ]
 
   providers = {
     proxmox = proxmox
@@ -37,12 +75,138 @@ module "worker" {
   balloon      = var.kube_worker_balloon
   cores        = var.kube_worker_cpus
   tags         = "kubernetes,kw"
-  pool         = "reifnet"
+  pool         = var.pm_pool
   scsihw       = "virtio-scsi-single"
   disk_size    = var.kube_worker_storage
   storage_pool = var.kube_node_storage_pool
   iso          = var.talos_iso
   bridge       = "vmbr0"
-  vlan_tag     = 50
+  vlan_tag     = var.datacenter_vlan_tag
   target_nodes = var.worker_target_nodes
+}
+
+### AdGuard DNS Record Setup
+resource "adguard_rewrite" "kubernetes_nodes" {
+  for_each = local.node_map_static
+
+  domain = "${each.key}.${var.dns_cluster_sld}.${var.dns_base_tld}"
+  answer = each.value
+}
+
+### Node OS Configuration (Talos)
+
+# Generate Machine Secrets for Talos Cluster
+resource "talos_machine_secrets" "machine_secrets" {}
+
+# Generate Client Configuration
+data "talos_client_configuration" "client_configuration" {
+  cluster_name         = local.cluster_name
+  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
+  endpoints            = local.formatted_endpoint_urls
+  nodes                = var.master_target_ips
+}
+
+# Declare Node Configuration
+data "talos_machine_configuration" "node_config" {
+  for_each         = local.node_map_dynamic
+  depends_on = [ 
+      module.control_plane,
+      module.worker
+    ]
+
+  cluster_name     = local.cluster_name
+  cluster_endpoint = "https://${local.node_map_static[local.master_names[0]]}:6443"
+  machine_type     = contains(local.master_names, each.key) ? "controlplane" : "worker"
+  machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
+
+  config_patches = [
+    yamlencode({
+      machine = {
+        install = {
+          image = "factory.talos.dev/installer/ff3e03c1a0ffc762a738957f1bcf32557df35ea5f7a022e084007badcfcaf379:v1.9.5"
+        }
+        network = {
+          interfaces = [
+            {
+              interface = "ens18"
+              addresses = ["${local.node_map_static[each.key]}/24"]
+              routes = [
+                {
+                  network = "0.0.0.0/0"
+                  gateway = var.node_gateway_ip
+                  metric  = 1024
+                }
+              ]
+            }
+          ]
+        }
+      }
+    })
+  ]
+}
+
+
+# Applies configuration for master nodes
+resource "talos_machine_configuration_apply" "node_config_apply" {
+  for_each = local.node_map_dynamic
+
+  client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
+  machine_configuration_input = data.talos_machine_configuration.node_config[each.key].machine_configuration
+  node                        = each.value
+}
+
+# Bootstraps the Cluster
+resource "talos_machine_bootstrap" "node_bootstrap" {
+  depends_on = [ talos_machine_configuration_apply.node_config_apply ]
+
+  node                 = local.node_map_static[local.master_names[0]]
+  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
+}
+
+# Retrieve Kubeconfig
+resource "talos_cluster_kubeconfig" "cluster_kubeconfig" {
+  depends_on          = [ talos_machine_bootstrap.node_bootstrap ]
+  node                  = local.node_map_static[local.master_names[0]]
+  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
+}
+
+### Outputs
+
+# Retrieve Kubeconfig
+output "o_kubeconfig" {
+  value       = talos_cluster_kubeconfig.cluster_kubeconfig
+  description = "The Kubeconfig for the Kubernetes cluster."
+  sensitive   = true
+}
+
+output "o_talosconfig" {
+  value       = data.talos_client_configuration.client_configuration.talos_config
+  description = "The talosconfig for the Talos cluster"
+  sensitive   = true
+}
+
+output "o_cluster_name" {
+  value       = local.cluster_name
+  description = "The name of the cluster for the talosconfig"
+}
+
+output "o_talosctl_certs" {
+  value       = talos_machine_secrets.machine_secrets.client_configuration
+  description = "The certs for the talosconfig"
+  sensitive   = true
+}
+
+output "o_master_node_domains" {
+  value       = local.master_domains
+  description = "FQDNs of Kubernetes master nodes"
+}
+
+output "o_worker_node_domains" {
+  value       = local.worker_domains
+  description = "FQDNs of Kubernetes worker nodes"
+}
+
+output "o_all_node_domains" {
+  value       = local.all_node_domains
+  description = "FQDNs of all Kubernetes nodes"
 }
