@@ -1,14 +1,27 @@
 ### Instructions: copy this file to a 'prod.tfvars' or 'dev.tfvars' file for use in your 'terraform apply/plan' commands.
 
+### Datacenter Network Configuration
+datacenter_vlan_tag = 75
+
+### DNS Records
+dns_base_tld     = "example"
+dns_cluster_sld = "k8s"
+
+### AdGuard Network
+adguard_host     = ""
+adguard_username = ""
+adguard_password = ""
+
 ### Proxmox Virtual Environment Varialbes
-proxmox_api_url     = "https://IP_ADDRESS:8006/api2/json" # Must include HTTPS
-pm_api_token_id     = ""                                  # Used instead of Username
-pm_api_token_secret = ""                                  # Used instead of Password
-pm_tls_insecure     = true                                # Set to TRUE if you are using Self-Signed Certificates
+proxmox_api_url     = "https://<IP_ADDRESS>:8006/api2/json"
+pm_api_token_id     = "t"
+pm_api_token_secret = ""
+pm_tls_insecure     = true
+pm_pool             = ""
 
 ### Kubernetes Cluster Variables
-talos_iso              = "ISO_PATH"  # Format: "storage-pool:storage-type/iso-name-with-file-extension"
-kube_node_storage_pool = "POOL_NAME" # Format: "storage-pool"
+talos_iso              = ""
+kube_node_storage_pool = ""
 
 control_plane_count = 3
 worker_count        = 3
@@ -17,16 +30,19 @@ worker_count        = 3
 master_target_nodes = ["vm-01", "vm-03"]
 worker_target_nodes = ["vm-01", "vm-03"]
 
+# Target IP Addresses for the Master Nodes (Must be the same # as 'control_plane_count')
+node_gateway_ip     = "192.168.75.1"
+master_target_ips   = ["192.168.75.11","192.168.75.12","192.168.75.13"]
+worker_target_ips   = ["192.168.75.101","192.168.75.102","192.168.75.103"]
+
 # Control Plane (Master) Node Settings
-kube_master_cpus            = 4
-kube_master_ram             = 4096
-kube_master_balloon         = 2048
-kube_master_storage_root    = "20G"
-kube_master_storage_cluster = "100G"
+kube_master_cpus    = 4
+kube_master_ram     = 4096
+kube_master_balloon = 2048
+kube_master_storage = "100G"
 
 # Worker Node Settings
-kube_worker_cpus            = 2
-kube_worker_ram             = 2048
-kube_worker_balloon         = 2048
-kube_worker_storage_root    = "20G"
-kube_worker_storage_cluster = "100G"
+kube_worker_cpus    = 2
+kube_worker_ram     = 2048
+kube_worker_balloon = 1024
+kube_worker_storage = "100G"
