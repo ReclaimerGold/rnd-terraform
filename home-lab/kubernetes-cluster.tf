@@ -98,14 +98,6 @@ resource "adguard_rewrite" "kubernetes_nodes" {
 # Generate Machine Secrets for Talos Cluster
 resource "talos_machine_secrets" "machine_secrets" {}
 
-# Generate Client Configuration
-data "talos_client_configuration" "client_configuration" {
-  cluster_name         = local.cluster_name
-  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoints            = local.formatted_endpoint_urls
-  nodes                = var.master_target_ips
-}
-
 # Declare Node Configuration
 data "talos_machine_configuration" "node_config" {
   for_each         = local.node_map_dynamic
@@ -123,7 +115,7 @@ data "talos_machine_configuration" "node_config" {
     yamlencode({
       machine = {
         install = {
-          image = "factory.talos.dev/installer/ff3e03c1a0ffc762a738957f1bcf32557df35ea5f7a022e084007badcfcaf379:v1.9.5"
+          image = "factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515:v1.9.5"
         }
         network = {
           interfaces = [
@@ -145,6 +137,12 @@ data "talos_machine_configuration" "node_config" {
   ]
 }
 
+# Generate Client Configuration
+data "talos_client_configuration" "client_config" {
+  cluster_name         = local.cluster_name
+  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
+  endpoints            = local.formatted_endpoint_urls
+}
 
 # Applies configuration for master nodes
 resource "talos_machine_configuration_apply" "node_config_apply" {
@@ -155,7 +153,7 @@ resource "talos_machine_configuration_apply" "node_config_apply" {
   node                        = each.value
 }
 
-# Bootstraps the Cluster
+# Bootstraps the Talos Cluster
 resource "talos_machine_bootstrap" "node_bootstrap" {
   depends_on = [ talos_machine_configuration_apply.node_config_apply ]
 
@@ -163,7 +161,7 @@ resource "talos_machine_bootstrap" "node_bootstrap" {
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
 }
 
-# Retrieve Kubeconfig
+# Retrieve Kubeconfig for Kubernetes
 resource "talos_cluster_kubeconfig" "cluster_kubeconfig" {
   depends_on          = [ talos_machine_bootstrap.node_bootstrap ]
   node                  = local.node_map_static[local.master_names[0]]
@@ -174,13 +172,13 @@ resource "talos_cluster_kubeconfig" "cluster_kubeconfig" {
 
 # Retrieve Kubeconfig
 output "o_kubeconfig" {
-  value       = talos_cluster_kubeconfig.cluster_kubeconfig
+  value       = talos_cluster_kubeconfig.cluster_kubeconfig.kubeconfig_raw
   description = "The Kubeconfig for the Kubernetes cluster."
   sensitive   = true
 }
 
 output "o_talosconfig" {
-  value       = data.talos_client_configuration.client_configuration.talos_config
+  value       = data.talos_client_configuration.client_config.talos_config
   description = "The talosconfig for the Talos cluster"
   sensitive   = true
 }
@@ -188,12 +186,6 @@ output "o_talosconfig" {
 output "o_cluster_name" {
   value       = local.cluster_name
   description = "The name of the cluster for the talosconfig"
-}
-
-output "o_talosctl_certs" {
-  value       = talos_machine_secrets.machine_secrets.client_configuration
-  description = "The certs for the talosconfig"
-  sensitive   = true
 }
 
 output "o_master_node_domains" {
