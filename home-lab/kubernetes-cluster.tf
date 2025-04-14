@@ -1,16 +1,19 @@
 ### Local Variables (kubernetes-cluster.tf only)
 locals {
-  # Network Assigned Values
+  ### Dynamic IP Addresses - Retrieved from PVE QEMU Agent
   master_ips   = [for m in module.control_plane : m.ip_address]
   worker_ips   = [for m in module.worker : m.ip_address]
 
-  # Variable-defined Values
+  ### Aggregated Lists
+  master_names   = [for m in module.control_plane : m.name]
+  worker_names   = [for m in module.worker : m.name]
+  master_domains = [for name in local.master_names : "${name}.${var.dns_cluster_sld}.${var.dns_base_tld}"]
+  worker_domains = [for name in local.worker_names : "${name}.${var.dns_cluster_sld}.${var.dns_base_tld}"]
+
+  all_node_names = concat(local.master_names, local.worker_names)
   all_node_ips = concat(local.master_ips, local.worker_ips)
   all_node_static_ips = concat(var.master_target_ips, var.worker_target_ips)
-  master_url   = "https://${local.master_ips[0]}:6443"
-  formatted_endpoint_urls = [
-    for ip in var.master_target_ips : "https://${ip}:6443"
-  ]
+  all_node_domains = concat(local.master_domains, local.worker_domains)
 
   # Name => *Static* IP Address Map
   node_map_static = merge(
@@ -24,13 +27,17 @@ locals {
     { for m in module.worker        : m.name => m.ip_address }
   )
 
-  master_names   = [for m in module.control_plane : m.name]
-  worker_names   = [for m in module.worker : m.name]
-  all_node_names = concat(local.master_names, local.worker_names)
+  # Utilized to generate the endpoints list in the talosconfig
+  formatted_endpoint_urls = [
+    for ip in var.master_target_ips : "https://${ip}:6443"
+  ]
 
-  master_domains = [for name in local.master_names : "${name}.${var.dns_cluster_sld}.${var.dns_base_tld}"]
-  worker_domains = [for name in local.worker_names : "${name}.${var.dns_cluster_sld}.${var.dns_base_tld}"]
-  all_node_domains = concat(local.master_domains, local.worker_domains)
+  ### Master URL for Initial Bootstrap (Currentl picks first CP in list)
+  master_url   = "https://${local.master_ips[0]}:6443"
+
+  ### Determines Counts of Node Types for Looping Module Blocks
+  control_plane_count = length(var.master_target_ips) # Dynamically Set Loop Iteration for CPs to IP Count
+  worker_count = length(var.worker_target_ips)        # Dynamically Set Loop Iteration for Ws to IP Count
 
   cluster_name     = "${var.dns_cluster_sld}.${var.dns_base_tld}"
 }
