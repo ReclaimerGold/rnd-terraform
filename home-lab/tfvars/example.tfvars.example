@@ -23,9 +23,6 @@ pm_pool             = ""
 talos_iso              = ""
 kube_node_storage_pool = ""
 
-control_plane_count = 3
-worker_count        = 3
-
 # Target nodes for each group (cycled using element() in the module)
 master_target_nodes = ["vm-01", "vm-03"]
 worker_target_nodes = ["vm-01", "vm-03"]

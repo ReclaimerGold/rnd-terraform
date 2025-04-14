@@ -69,16 +69,6 @@ variable "kube_node_storage_pool" {
   type        = string
 }
 
-variable "control_plane_count" {
-  description = "Number of control plane nodes to deploy"
-  type        = number
-}
-
-variable "worker_count" {
-  description = "Number of worker nodes to deploy"
-  type        = number
-}
-
 variable "master_target_nodes" {
   description = "List of Proxmox nodes to cycle through for control planes"
   type        = list(string)

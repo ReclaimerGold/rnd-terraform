@@ -45,7 +45,7 @@ locals {
 ### Node Infrastructure (VMs on PVE)
 module "control_plane" {
   source = "./modules/vm"
-  count  = var.control_plane_count
+  count  = local.control_plane_count
 
   providers = {
     proxmox = proxmox
@@ -69,7 +69,7 @@ module "control_plane" {
 
 module "worker" {
   source = "./modules/vm"
-  count  = var.worker_count
+  count  = local.worker_count
   depends_on = [ module.control_plane ]
 
   providers = {
