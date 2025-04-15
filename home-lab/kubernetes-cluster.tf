@@ -109,6 +109,7 @@ resource "talos_machine_secrets" "machine_secrets" {}
 data "talos_machine_configuration" "node_config" {
   for_each         = local.node_map_dynamic
   depends_on = [ 
+      talos_machine_secrets.machine_secrets,
       module.control_plane,
       module.worker
     ]
