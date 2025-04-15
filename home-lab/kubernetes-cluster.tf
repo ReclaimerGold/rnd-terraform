@@ -151,7 +151,8 @@ data "talos_client_configuration" "client_config" {
   depends_on = [ talos_machine_secrets.machine_secrets ]
   cluster_name         = local.cluster_name
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoints            = local.formatted_endpoint_urls
+  endpoints            = var.master_target_ips
+  nodes                = local.all_node_static_ips
 }
 
 # Applies configuration for master nodes
