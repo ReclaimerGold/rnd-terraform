@@ -125,6 +125,8 @@ data "talos_machine_configuration" "node_config" {
           image = "factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515:v1.9.5"
         }
         network = {
+          nameservers = [var.dns_server_01, var.dns_server_02]
+          hostname = "${each.key}.${var.dns_cluster_sld}.${var.dns_base_tld}"
           interfaces = [
             {
               interface = "ens18"
