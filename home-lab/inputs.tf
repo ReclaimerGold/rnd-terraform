@@ -3,7 +3,7 @@ variable "datacenter_vlan_tag" {
   description = "Specifies the VLAN tag that should be used when deploying machines to the datacenter."
 }
 
-### Local DNS Record Configuration
+### Local DNS
 variable "dns_base_tld" {
   description = "The base TLD (Top-Level Domain) for your local network. Example: 'microsoft.com' would be 'com'."
   type        = string
