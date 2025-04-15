@@ -33,7 +33,7 @@ locals {
   ]
 
   ### Master URL for Initial Bootstrap (Currentl picks first CP in list)
-  master_url   = "https://${local.master_ips[0]}:6443"
+  master_url   = "https://${local.master_domains[0]}:6443"
 
   ### Determines Counts of Node Types for Looping Module Blocks
   control_plane_count = length(var.master_target_ips) # Dynamically Set Loop Iteration for CPs to IP Count
