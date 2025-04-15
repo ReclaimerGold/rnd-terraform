@@ -14,6 +14,18 @@ variable "dns_cluster_sld" {
   type        = string
 }
 
+variable "dns_server_01" {
+  description = "The primary DNS server for the datacenter."
+  type        = string
+}
+
+
+variable "dns_server_02" {
+  description = "The secondary DNS server for the datacenter."
+  type        = string
+}
+
+
 ### Adguard DNS Server
 variable "adguard_host" {
   description = "The Username for the Terraform Account in AdGuard"
