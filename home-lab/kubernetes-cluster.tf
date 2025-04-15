@@ -148,6 +148,7 @@ data "talos_machine_configuration" "node_config" {
 
 # Generate Client Configuration
 data "talos_client_configuration" "client_config" {
+  depends_on = [ talos_machine_secrets.machine_secrets ]
   cluster_name         = local.cluster_name
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
   endpoints            = local.formatted_endpoint_urls
