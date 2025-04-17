@@ -1,49 +1,49 @@
 ### Instructions: copy this file to a 'prod.tfvars' or 'dev.tfvars' file for use in your 'terraform apply/plan' commands.
 
 ### Datacenter Network Configuration
-datacenter_vlan_tag = 75
+datacenter_vlan_tag = 10 # VLAN tag for the datacenter network
 
 ### DNS
-dns_base_tld     = "com"
-dns_cluster_sld = "example"
-dns_server_01 = ""
-dns_server_02 = ""
+dns_base_tld        = "net"             # Base top-level domain
+dns_cluster_sld     = "reiffenberger"    # Second-level domain for the cluster
+dns_server_01       = "192.168.x.x"       # IP address of the primary DNS server
+dns_server_02       = "192.168.x.x"       # IP address of the secondary DNS server
 
 ### AdGuard Network
-adguard_host     = "192.168.1.6"
-adguard_username = "rreiffenberger"
-adguard_password = "RRTimo1$$k1pp3r"
+adguard_host        = "192.168.x.x"        # IP address or hostname of the AdGuard server
+adguard_username    = "DUMMY_USERNAME"   # Username for accessing AdGuard
+adguard_password    = "DUMMY_PASSWORD"   # Password for accessing AdGuard
 
 ### Proxmox Virtual Environment Varialbes
-proxmox_api_url     = "https://IP:8006/api2/json"
-pm_api_token_id     = ""
-pm_api_token_secret = ""
-pm_tls_insecure     = true
-pm_pool             = ""
+proxmox_api_url     = "https://192.168.x.x:8006/api2/json" # URL for the Proxmox API
+pm_api_token_id     = "DUMMY_TOKEN_ID"                       # API token ID for Proxmox
+pm_api_token_secret = "DUMMY_TOKEN_SECRET"                   # API token secret for Proxmox
+pm_tls_insecure     = true                                   # Skip TLS verification for Proxmox API (use with caution)
+pm_pool             = "yourpool"                             # Storage pool in Proxmox to use for VMs
 
 ### Kubernetes Cluster Variables
-talos_iso              = ""
-kube_node_storage_pool = ""
+talos_iso              = "your_iso_pool:iso/talos_image.iso" # Path or datastore:path to the Talos Linux ISO
+kube_node_storage_pool = "your_vdisk_pool"                   # Storage pool in Proxmox for Kubernetes node disks
 
 # Target nodes for each group (cycled using element() in the module)
-master_target_nodes = ["vm-01"]
-worker_target_nodes = ["vm-01"]
+master_target_nodes = ["vm-01", "vm-03"] # List of Proxmox Host PVE names to be used as master nodes
+worker_target_nodes = ["vm-01", "vm-03"] # List of Proxmox Host PVE names to be used as worker nodes
 
 # Target IP Addresses for the Master Nodes and Worker Nodes.
 # Quantity of nodes is determined by # of IPs in list.
 # Format: ["0.0.0.0", "0.0.0.0", "0.0.0.0", ...]
-node_gateway_ip     = "192.168.75.1"
-master_target_ips   = ["192.168.75.11"]
-worker_target_ips   = ["192.168.75.101", "192.168.75.102"]
+node_gateway_ip     = "192.168.10.1"     # Gateway IP address for the Kubernetes nodes network
+master_target_ips   = ["192.168.10.11"]    # List of static IP addresses to assign to master nodes
+worker_target_ips   = ["192.168.10.101","192.168.75.102"] # List of static IP addresses to assign to worker nodes
 
 # Control Plane (Master) Node Settings
-kube_master_cpus    = 2
-kube_master_ram     = 2048
-kube_master_balloon = 2048
-kube_master_storage = "30G"
+kube_master_cpus    = 4     # Number of CPU cores for each master node VM
+kube_master_ram     = 4096  # Amount of RAM (in MB) for each master node VM
+kube_master_balloon = 2048  # Ballooning target size (in MB) for master node VMs (for memory overcommitment)
+kube_master_storage = "30G" # Disk size for the root volume of each master node VM
 
 # Worker Node Settings
-kube_worker_cpus    = 4
-kube_worker_ram     = 4096
-kube_worker_balloon = 2048
-kube_worker_storage = "150G"
+kube_worker_cpus    = 4      # Number of CPU cores for each worker node VM
+kube_worker_ram     = 8192   # Amount of RAM (in MB) for each worker node VM
+kube_worker_balloon = 2048   # Ballooning target size (in MB) for worker node VMs (for memory overcommitment)
+kube_worker_storage = "150G" # Disk size for the root volume of each worker node VM
