@@ -14,7 +14,7 @@ locals {
   all_node_ips = concat(local.master_ips, local.worker_ips)
   all_node_static_ips = concat(var.master_target_ips, var.worker_target_ips)
   all_node_domains = concat(local.master_domains, local.worker_domains)
-
+  
   # Name => *Static* IP Address Map
   node_map_static = merge(
     { for idx, name in local.master_names : name => var.master_target_ips[idx] },
@@ -213,19 +213,4 @@ output "o_talosconfig" {
 output "o_cluster_name" {
   value       = local.cluster_name
   description = "The name of the cluster for the talosconfig"
-}
-
-output "o_master_node_domains" {
-  value       = local.master_domains
-  description = "FQDNs of Kubernetes master nodes"
-}
-
-output "o_worker_node_domains" {
-  value       = local.worker_domains
-  description = "FQDNs of Kubernetes worker nodes"
-}
-
-output "o_all_node_domains" {
-  value       = local.all_node_domains
-  description = "FQDNs of all Kubernetes nodes"
 }
