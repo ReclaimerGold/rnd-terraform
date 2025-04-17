@@ -51,7 +51,7 @@ resource "proxmox_vm_qemu" "vm" {
     id       = 0
     model    = "virtio"
     bridge   = var.bridge
-    firewall = true
+    firewall = false
     tag      = var.vlan_tag
 
     # Utilized to generate a static MAC address for the lifetime of the machine to maintain IP address reservations when Talos Nodes reboot to configure

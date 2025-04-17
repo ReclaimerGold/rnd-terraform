@@ -123,11 +123,26 @@ data "talos_machine_configuration" "node_config" {
     yamlencode({
       machine = {
         install = {
-          image = "factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515:v1.9.5"
+          image = "factory.talos.dev/installer/88d1f7a5c4f1d3aba7df787c448c1d3d008ed29cfb34af53fa0df4336a56040b:v1.9.5"
+          # Pre-Built Image to include 'iscsi-tools', 'qemu-guest-agent', and 'util-linux-tools'
         }
+        kubelet = {
+          extraMounts = [
+            {
+              destination = "/var/lib/longhorn"  # Longhorn data path
+              type        = "bind"
+              source      = "/var/lib/longhorn"
+              options     = ["bind","rshared","rw"]
+            }
+          ]
+        }
+        # If you ever move to V2 Data Engine, you can also uncomment:
+        # sysctls = { "vm.nr_hugepages" = "1024" }
+        # kernel  = { modules = [{ name = "nvme_tcp" }, { name = "vfio_pci" }] }
+        # ——— END Longhorn Talos Linux Support ———
         network = {
-          nameservers = [var.dns_server_01, var.dns_server_02]
-          hostname = "${each.key}.${var.dns_cluster_sld}.${var.dns_base_tld}"
+          #nameservers = [var.dns_server_01, var.dns_server_02]
+          hostname = "${each.key}"
           interfaces = [
             {
               interface = "ens18"
