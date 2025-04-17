@@ -119,7 +119,7 @@ data "talos_machine_configuration" "node_config" {
   machine_type     = contains(local.master_names, each.key) ? "controlplane" : "worker"
   machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
 
-  config_patches = [
+  config_patches = compact([
     yamlencode({
       machine = {
         install = {
@@ -159,7 +159,7 @@ data "talos_machine_configuration" "node_config" {
         }
       }
     })
-  ]
+  ])
 }
 
 # Generate Client Configuration
