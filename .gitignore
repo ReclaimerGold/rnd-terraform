@@ -18,7 +18,6 @@ override.tf.json
 # Exclude variable files containing sensitive data
 *.tfvars
 *.tfvars.json
-.terraform.lock.hcl
 
 # Ignore CLI configuration files
 .terraformrc
