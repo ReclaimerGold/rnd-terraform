@@ -1,8 +1,23 @@
-# Reif.NET Home Lab PVE/k8s Cluster Management
+# Home Lab Boilerplate Deployment
 
-**THIS README WAS LAST AUDITED:** 04/13/2024
+Currently utilized for Reif.NET home lab datacenter usage. Encourage for others who want to deploy Kubernetes, as well as a myriad of other tools in a home lab.
+
+License: 
+
+![GitHub License](https://img.shields.io/github/license/reclaimergold/rnd-terraform)
 
 This repository manages the infrastructure and applications for the Reif.NET home lab using FluxCD and Terraform. It employs GitOps principles to ensure that the cluster configurations are defined declaratively and managed efficiently on top of my Proxmox Virtual Environment (PVE).
+
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/reclaimergold/rnd-terraform) ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed/reclaimergold/rnd-terraform)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr/reclaimergold/rnd-terraform) ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr-closed/reclaimergold/rnd-terraform)
+
+The goal is to create a robust repository that allows the user to drop into any 'point' in the process, whether it be starting with Proxmox Virtual Environment (PVE) or starting with Talos, and being able to specify the scope of deployment. I'm trying to be as active as possible on this repository, as it is what manages most of my infrastructure.
+
+![GitHub commit activity](https://img.shields.io/github/commit-activity/y/reclaimergold/rnd-terraform)
+
+Pull requests and issue reports are 100% welcome, if not aggressively encouraged. The only way we build better (l33t) code, is by collaboration. 
+
+![GitHub contributors](https://img.shields.io/github/contributors-anon/reclaimergold/rnd-terraform)
 
 ## Overview
 
@@ -10,12 +25,12 @@ The home lab consists of various self-hosted applications, utilities, and servic
 
 ## Repository Structure
 
+> This section is not yet up to date, and is for my personal use. I will be moving my FluxCD deployment to this repository soon, check back later for the updated full filesystem.
+
 - **flux-home/**: Contains FluxCD configurations for managing Kubernetes applications.
   - **apps/**: Application deployments configurations for my k8s cluster.
   - **clusters/**: FluxCD cluster configurations for applying infrastructure and application state.
   - **setup-scripts/**: Shell scripts to set up dependencies and prerequisites for Longhorn and other systems.
-
-- **talos/**: Configuration files for Talos, an operating system designed for Kubernetes management, used to define control plane and worker node settings. **This will be deprecated, and is not in use.**
 
 - **terraform/**: Terraform configurations to manage the infrastructure, including VMs on Proxmox and network configurations.
   - **home-lab/**: Specific configurations and terraform state for the home lab setup.
