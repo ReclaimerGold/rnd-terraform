@@ -44,7 +44,7 @@ locals {
 
 ### Node Infrastructure (VMs on PVE)
 module "control_plane" {
-  source = "./modules/vm"
+  source = "./modules/kube-node"
   count  = local.control_plane_count
 
   providers = {
@@ -68,7 +68,7 @@ module "control_plane" {
 }
 
 module "worker" {
-  source = "./modules/vm"
+  source = "./modules/kube-node"
   count  = local.worker_count
   depends_on = [ module.control_plane ]
 
